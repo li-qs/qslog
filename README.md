@@ -1,25 +1,25 @@
 # qslog
 
-For english: [README.en.md](README.en.md)
+中文: [README.zh.md](README.zh.md)
 
-轻量级 Go 语言日志库，基于标准库 `log` 封装，支持日志分级输出（DEBUG / INFO / WARN / ERROR）。
+A lightweight Go logging library built on the standard `log` package, supporting leveled logs (DEBUG / INFO / WARN / ERROR).
 
-## 特性
+## Features
 
-- 日志等级支持：DEBUG、INFO、WARN、ERROR
-- 纯文本格式，输出时间、等级、文件名和行号
-- 简单易用，无第三方依赖
-- 可配置全局日志等级
+- Log levels: DEBUG, INFO, WARN, ERROR
+- Plain text output with timestamp, level, file, and line number
+- Simple usage with zero dependencies
+- Global log level configuration
 
 ---
 
-## 安装
+## Installation
 
 ```bash
 go get github.com/li-qs/qslog
 ```
 
-## 使用
+## Usage
 
 ```go
 package main
@@ -36,24 +36,24 @@ func main() {
 	qslog.Warn("...")
 	qslog.Error("...")
 
-	qslog.Infof("用户 %s 已登录", "admin") // 打印：[2025-01-01 01:01:01] [INFO] 用户 admin 已登录
-	qslog.Errorf("错误: %d", 500) // 打印：[2025-01-01 01:01:01] [ERROR] 错误: 500
+	qslog.Infof("User %s has logged in", "admin")
+	qslog.Errorf("Error code: %d", 500)
 }
-```
+````
 
 ## API
 
-| 函数                   | 说明                |
-| ---------------------- | ------------------- |
-| `SetLevel(Level)`      | 设置日志级别        |
-| `Debug(args...)`       | 打印 Debug 级别日志 |
-| `Info(args...)`        | 打印 Info 级别日志  |
-| `Warn(args...)`        | 打印 Warn 级别日志  |
-| `Error(args...)`       | 打印 Error 级别日志 |
-| `Debugf(fmt, args...)` | 格式化 Debug 日志   |
-| `Infof(fmt, args...)`  | 格式化 Info 日志    |
-| `Warnf(fmt, args...)`  | 格式化 Warn 日志    |
-| `Errorf(fmt, args...)` | 格式化 Error 日志   |
+| Function               | Description                   |
+| ---------------------- | ----------------------------- |
+| `SetLevel(Level)`      | Set the logging level         |
+| `Debug(args...)`       | Log a message at Debug level  |
+| `Info(args...)`        | Log a message at Info level   |
+| `Warn(args...)`        | Log a message at Warn level   |
+| `Error(args...)`       | Log a message at Error level  |
+| `Debugf(fmt, args...)` | Log a formatted Debug message |
+| `Infof(fmt, args...)`  | Log a formatted Info message  |
+| `Warnf(fmt, args...)`  | Log a formatted Warn message  |
+| `Errorf(fmt, args...)` | Log a formatted Error message |
 
 ## License
 
