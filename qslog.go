@@ -50,19 +50,26 @@ func logMessage(level Level, msg string) {
 }
 
 func Debug(v ...interface{}) {
-	logMessage(DebugLevel, fmt.Sprint(v...))
+	logMessage(DebugLevel, trimNewline(fmt.Sprintln(v...)))
 }
 
 func Info(v ...interface{}) {
-	logMessage(InfoLevel, fmt.Sprint(v...))
+	logMessage(InfoLevel, trimNewline(fmt.Sprintln(v...)))
 }
 
 func Warn(v ...interface{}) {
-	logMessage(WarnLevel, fmt.Sprint(v...))
+	logMessage(WarnLevel, trimNewline(fmt.Sprintln(v...)))
 }
 
 func Error(v ...interface{}) {
-	logMessage(ErrorLevel, fmt.Sprint(v...))
+	logMessage(ErrorLevel, trimNewline(fmt.Sprintln(v...)))
+}
+
+func trimNewline(s string) string {
+	if len(s) > 0 && s[len(s)-1] == '\n' {
+		return s[:len(s)-1]
+	}
+	return s
 }
 
 func Debugf(format string, v ...interface{}) {
