@@ -2,10 +2,10 @@ package qslog
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"sync"
-	"time"
 )
 
 type Level int
@@ -18,10 +18,16 @@ const (
 	FatalLevel
 )
 
-var levelNames = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
+var (
+	levelNames   = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
+	currentLevel = InfoLevel
+	mu           sync.Mutex
+	logger       *log.Logger
+)
 
-var currentLevel = InfoLevel
-var mu sync.Mutex
+func init() {
+	logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
+}
 
 func SetLevel(level Level) {
 	mu.Lock()
@@ -35,6 +41,24 @@ func GetLevel() Level {
 	return currentLevel
 }
 
+func SetOutput(w io.Writer) {
+	mu.Lock()
+	defer mu.Unlock()
+	logger.SetOutput(w)
+}
+
+func SetPrefix(prefix string) {
+	mu.Lock()
+	defer mu.Unlock()
+	logger.SetPrefix(prefix)
+}
+
+func SetFlags(flag int) {
+	mu.Lock()
+	defer mu.Unlock()
+	logger.SetFlags(flag)
+}
+
 func shouldLog(level Level) bool {
 	return level >= GetLevel()
 }
@@ -44,10 +68,9 @@ func logMessage(level Level, msg string) {
 		return
 	}
 
-	now := time.Now().Format("2006-01-02 15:04:05")
 	levelStr := levelNames[level]
 
-	log.Printf("[%s] [%s] %s", now, levelStr, msg)
+	logger.Printf("[%s] %s", levelStr, msg)
 }
 
 func Debug(v ...interface{}) {
@@ -97,9 +120,4 @@ func Errorf(format string, v ...interface{}) {
 func Fatalf(format string, v ...interface{}) {
 	logMessage(FatalLevel, fmt.Sprintf(format, v...))
 	os.Exit(1)
-}
-
-func init() {
-	log.SetOutput(os.Stdout)
-	log.SetFlags(0)
 }
