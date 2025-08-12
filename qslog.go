@@ -15,9 +15,10 @@ const (
 	InfoLevel
 	WarnLevel
 	ErrorLevel
+	FatalLevel
 )
 
-var levelNames = []string{"DEBUG", "INFO", "WARN", "ERROR"}
+var levelNames = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
 
 var currentLevel = InfoLevel
 var mu sync.Mutex
@@ -65,6 +66,11 @@ func Error(v ...interface{}) {
 	logMessage(ErrorLevel, trimNewline(fmt.Sprintln(v...)))
 }
 
+func Fatal(v ...interface{}) {
+	logMessage(FatalLevel, trimNewline(fmt.Sprintln(v...)))
+	os.Exit(1)
+}
+
 func trimNewline(s string) string {
 	if len(s) > 0 && s[len(s)-1] == '\n' {
 		return s[:len(s)-1]
@@ -86,6 +92,11 @@ func Warnf(format string, v ...interface{}) {
 
 func Errorf(format string, v ...interface{}) {
 	logMessage(ErrorLevel, fmt.Sprintf(format, v...))
+}
+
+func Fatalf(format string, v ...interface{}) {
+	logMessage(FatalLevel, fmt.Sprintf(format, v...))
+	os.Exit(1)
 }
 
 func init() {
